@@ -9,7 +9,7 @@ declare class Framework7 {
 	/** App version. */
 	version: string;
 	/** App routes. */
-	routes: Framework7.View.Route[];
+	routes: Framework7.Route[];
 	/** App language. */
 	language: string;
 	/** Dom7 instance with app root element. */
@@ -1230,7 +1230,7 @@ declare class Framework7 {
 	}
 
 	/** Router of app */
-	router: Framework7.View.Router;
+	router: Framework7.Router;
 
 	/** views of app */
 	views: {
@@ -1328,7 +1328,7 @@ declare namespace Framework7 {
 		/** App language. Can be used by other components. By default equal to the current browser/webview language (i.e. navigator.language). */
 		language?: string;
 		/** Array with default routes to all views. `Default: []` */
-		routes?: View.Route[];
+		routes?: Route[];
 		/** App root element. `Default: body`*/
 		root: string;
 		/** App root data. Must be a function that returns an object with root data. */
@@ -2698,7 +2698,7 @@ declare namespace Framework7 {
 	interface PageData {
 		app: Framework7;
 		view: View;
-		router: View.Router;
+		router: Router;
 		name: string;
 		el: HTMLElement;
 		$el: Dom7.Dom7;
@@ -2708,7 +2708,7 @@ declare namespace Framework7 {
 		to: string;
 		position: string;
 		direction: string;
-		route: View.Route;
+		route: Route;
 		pageFrom: PageData;
 		context: Template7.Template7;
 		fromPage: PageData;
@@ -5106,7 +5106,7 @@ declare namespace Framework7 {
 	//
 
 	/** View's main purpose is a navigating/routing between pages. We can access its router instance by view.router. It has a lot of useful methods and properties to take control over routing and navigation. */
-	class View {
+	export class View {
 		/** Link to global app instance. */
 		app: Framework7;
 		/** View HTML element. */
@@ -5118,13 +5118,13 @@ declare namespace Framework7 {
 		/** Boolean property indicating is it a main view or not. */
 		main: boolean;
 		/** Array with available router's routes. */
-		routes: View.Route[];
+		routes: Route[];
 		/** Array with view history. */
 		history: any[];
 		/** Object with view initialization parameters. */
 		params: View.Parameter;
 		/** View's initialized router instance. */
-		router: View.Router;
+		router: Router;
 
 		constructor(appInstance: Framework7, el: Element, viewParams: View.Parameter);
 
@@ -5291,278 +5291,279 @@ declare namespace Framework7 {
 			/** Object with events handlers. */
 			on?: { [key: string]: Function };
 		}
-
-
-		type RouteAsync = (routeTo: RoutePath, routeFrom: RoutePath, resolve: (parameters: Route, options?: RouteOptions) => void, reject: () => void) => void;
-
-		interface RouterComponent {
-			/** Template7 template string. Will be compiled as Template7 template. */
-			template?: string;
-			/** Render function to render component. Must return full html string or HTMLElement. */
-			render?: Function;
-			/** Component data, function must return component context data. */
-			data?: Function;
-			/** Component CSS styles. Styles will be added to the document after component will be mounted (added to DOM), and removed after component will be destroyed (removed from the DOM). */
-			style?: string;
-			/** Unique style scope id in case you are using scoped styles. Will add data-scope="styleScopeId" to the component element. */
-			styleScopeId?: string;
-			/** Object with additional component methods which extend component context. */
-			methods?: string;
-			/** Object with page events handlers. */
-			on?: { [key: string]: Function };
-			/** Called synchronously immediately after the component has been initialized, before data and event/watcher setup. */
-			beforeCreate?: () => void;
-			/** Called synchronously after the component is created, context data and methods are available and component element $el is also created and available. */
-			created?: () => void;
-			/** Called right before component will be added to DOM. */
-			beforeMount?: () => void;
-			/** Called right after component was be added to DOM. */
-			mounted?: () => void;
-			/** Called right before component will be destoyed. */
-			beforeDestroy?: () => void;
-			/** Called when component destroyed. */
-			destroyed?: () => void;
-		}
-
-		interface ComponentContext {
-			/** Dom7 instance with component HTML element */
-			$el: Dom7.Dom7;
-			/** Dom7 library */
-			$:  Dom7.Dom7Static;
-			/** Dom7 library */
-			$$:  Dom7.Dom7Static;
-			/** Dom7 library */
-			$dom7: Dom7.Dom7Static;
-			/** Framework7 app instance */
-			$app: Framework7;
-			/** Root data and methods you have specified in `data` and `methods` properties on app init */
-			$root: any;
-			/** Current route. Contains object with route. */
-			$route: Route;
-			/** Related router instance. */
-			$router: Router;
-			/** Object with md and ios boolean properties which indicating current theme. */
-			$theme: {
-				/** andriod style is active or not */
-				md: boolean,
-				/** ios style is active or not */
-				ios: boolean
-			};
-		}
-
-		interface Routable {
-			/** Creates dynamic page from specified content string */
-			content?: string;
-			/** Load page content from passed Template7 template string or function */
-			template?: string | Function;
-			/** Load page content from url via Ajax, and compile it using Template7 Also supports dynamic route params from route path using {{paramName}} expression */
-			templateUrl?: string;
-			/** Load page from passed Framework7 Router Component */
-			component?: RouterComponent;
-			/** load pages as a component via Ajax Also supports dynamic route params from route path using {{paramName}} expression */
-			componentUrl?: string;
-		}
-
-		interface RouteOptions {
-			/** Whether the page should be animated or not (overwrites default router settings). */
-			animate?: boolean;
-			/** Whether the page should be saved in router history. */
-			history?: boolean;
-			/** Whether the page should be saved in browser state. In case you are using pushState, then you can pass here false to prevent route getting in browser history. */
-			pushState?: boolean;
-			/** Replace the current page with the new one from route. */
-			reloadCurrent?: boolean;
-			/** Replace the previous page in history with the new one from route. */
-			reloadPrevious?: boolean;
-			/** Load new page and remove all previous pages from history and DOM. */
-			reloadAll?: boolean;
-			/** Custom/extended context for Template7/Component page (when route loaded from `template`, `templateUrl`, `component` or `componentUrl`) */
-			context?: any;
-		}
-
-		interface RoutePath {
-			/** hash for the path. */
-			hash?: string;
-			/** Alais name of the path. */
-			name?: string;
-			/** Parent of this route path. */
-			parentPath?: string;
-			/** route params. If we have matching route with /page/user/:userId/post/:postId/ path and url of the page is /page/user/55/post/12/ then it will be the following object {userId: '55', postId: '12'}. */
-			params: any;
-			/** Route path. */
-			path: string;
-			/** object with route query. If the url is /page/?id=5&foo=bar then it will contain the following object {id: '5', foo: 'bar'}. */
-			query: any;
-			/** Route URL. */
-			url: string;
-			/** object with matching route from available routes. */
-			route: Route;
-		}
-
-		interface Route {
-			/** Route name, e.g. `home`. */
-			name?: string;
-			/** Route path. Means this route will be loaded when we click link that match to this path, or can be loaded by this path using API. */
-			path?: string;
-			/** Object with additional route options (optional). */
-			options?: RouteOptions;
-			/** Array with nested routes. */
-			routes?: Route[];
-			/** Load page from DOM by passed HTMLElement. */
-			el?: HTMLElement;
-			/** Load page from DOM that has same data-name attribute. */
-			pageName?: string;
-			/** Creates dynamic page from specified content string */
-			content?: string;
-			/** Load page content via Ajax.
-			 * Also supports dynamic route params from route path using {{paramName}} expression, 
-			 * 
-			 * e.g. `"/users/:userId/posts/:postId"` or `"http://myapp.com/posts/{{userId}}/{{postId}}'"`
-			 */
-			url?: string;
-			/** Load page content from passed Template7 template string or function. */
-			template?: string | Function;
-			/** Load page content from url via Ajax, and compile it using Template7. */
-			templateUrl?: string;
-			/** Load page from passed Framework7 Router Component. */
-			component?: any;
-			/** load pages as a component via Ajax Also supports dynamic route params from route path using {{paramName}} expression */
-			componentUrl?: string;
-			/** Do required asynchronous manipulation and the return required route content and options. */
-			async?: RouteAsync;
-			/** Array with tab routes */
-			tabs?: Tabs.TabRoute[];
-			/** Action Sheet route */
-			actions?: Routable;
-			/** Popup route */
-			popup?: Routable;
-			/** Login screen route */
-			loginScreen?: Routable;
-			/** Popover route */
-			popover?: Routable;
-			/** Sheet route */
-			sheet?: Routable;
-			/** Object with event handlers */
-			on?: { [key:string]: Function };
-			/** Route alias, or array with route aliases. We need to specify here alias `path` */
-			alias?: string | string[];
-			/** Route redirect. We need to specify here redirect `url` (not path) */
-			redirect?: string | { (route: RoutePath, resolve: (url: string, options?: RouteOptions) => void, reject: () => void) };
-		}
-
-        class Router {
-			/** Link to global app instance. */
-			app: Framework7;
-			/** Link to related View instance. */
-			view: View;
-			/** Object with router initialization parameters. */
-			params: object;
-			/** Router's view HTML element. */
-			el: HTMLElement;
-			/** Dom7 instance with router's view HTML element. */
-			$el: Dom7.Dom7;
-			/** Array with available router's routes. */
-			routes: Route[];
-			/** Array with router's view history. */
-			history: string[];
-			/** Object with router/view cache data. */
-			cache: {
-				components: RouterComponent[],
-				templates: Template7.Template7[],
-				xhr: F7XMLHttpRequest[]
-			};
-			/** Object with current route data. */
-			currentRoute: RoutePath;
-			/** Object with previously active route data. */
-			previousRoute: RoutePath;
-			/** Boolean property indicating is it allowed to change page / navigate or not. */
-			allowPageChange: boolean;
-
-			constructor(app: Framework7, view: View);
-			
-			/**
-			 * Navigate to (load) new page.
-			 * @param url url to navigate to
-			 * @param options with additional navigation properties (optional):
-			 */
-			navigate(url: string, options?: {
-				/** replace the current page with the new one from route. */
-				reloadCurrent?: boolean,
-				/** replace the previous page in history with the new one from route. */
-				reloadPrevious?: boolean,
-				/** load new page and remove all previous pages from history and DOM. */
-				reloadAll?: boolean,
-				/** previous pages history will be cleared after reloading/navigate to the specified route. */
-				clearPreviousHistory?: boolean,
-				/** whether the page should be animated or not (overwrites default router settings). */
-				animate?: boolean,
-				/** whether the page should be saved in router history. */
-				history?: boolean,
-				/** whether the page should be saved in browser state. In case you are using pushState, then you can pass here false to prevent route getting in browser history. */
-				pushState?: boolean,
-				/** If set to true then it will ignore if such URL in cache and reload it using XHR again. */
-				ignoreCache?: boolean,
-				/** Additional Router component or Template7 page context. */
-				context?: object | Template7.Template7
-			});
-			
-			/**
-			 * Go back to previous page, going back in View history.
-			 * @param url url to navigate to (optional). If not specified, then it will go back to the previous page in history.
-			 * @param options with additional navigation properties (optional):
-			 */
-			back(url?: string, options?: {
-				/** whether the page should be animated or not (overwrites default router settings). */
-				animate?: boolean,
-				/** whether the page should be saved in browser state. In case you are using pushState, then you can pass here false to prevent route getting in browser history. */
-				pushState?: boolean,
-				/** If set to true then it will ignore if such URL in cache and reload it using XHR again. */
-				ignoreCache?: boolean,
-				/** if set to true then it will ignore previous page in history and load specified one. */
-				force?: boolean
-			}): void;
-
-			/** Refresh/reload current page. */
-			refreshPage(): void;
-
-			/** Clear router previous pages history and remove all previous pages from DOM. */
-			clearPreviousHistory(): void;
-
-			/**
-			 * Add event handler.
-			 * @param event the name of the event: `init` | `resize` | `orientationchange` | `click` | `touchstart:active` | `touchmove:active` | `touchend:active` | `touchstart:passive` | `touchmove:passive` | `touchend:passive`
-			 * @param handler the handle function that will be added for the event 
-			 */
-			on(event: string, handler: Function): void;
-
-			/** 
-			 * Add event handler that will be removed after it was fired
-			 * @param event the name of the event: `init` | `resize` | `orientationchange` | `click` | `touchstart:active` | `touchmove:active` | `touchend:active` | `touchstart:passive` | `touchmove:passive` | `touchend:passive`
-			 * @param handler the handle function that will be fired once for the event 
-			 */
-			once(event: string, handler: Function): void;
-
-			/** 
-			 * Remove event handler.
-			 * @param event the name of the event: `init` | `resize` | `orientationchange` | `click` | `touchstart:active` | `touchmove:active` | `touchend:active` | `touchstart:passive` | `touchmove:passive` | `touchend:passive`
-			 * @param handler the handle function that will be removed for the event
-			 */
-			off(event: string, handler: Function): void;
-
-			/**
-			 * Remove all handlers for specified event.
-			 * @param event the name of the event: `init` | `resize` | `orientationchange` | `click` | `touchstart:active` | `touchmove:active` | `touchend:active` | `touchstart:passive` | `touchmove:passive` | `touchend:passive`
-			 */
-			off(event: string): void;
-
-			/**
-			 * Fire event on instance.
-			 * @param event event name.
-			 * @param args argument that will be passed into the event handler.
-			 */
-			emit(event: string, ...args: any[]): void
-		}
 	}
+
+	
+	type RouteAsync = (routeTo: RoutePath, routeFrom: RoutePath, resolve: (parameters: Route, options?: RouteOptions) => void, reject: () => void) => void;
+
+	interface RouterComponent {
+		/** Template7 template string. Will be compiled as Template7 template. */
+		template?: string;
+		/** Render function to render component. Must return full html string or HTMLElement. */
+		render?: Function;
+		/** Component data, function must return component context data. */
+		data?: Function;
+		/** Component CSS styles. Styles will be added to the document after component will be mounted (added to DOM), and removed after component will be destroyed (removed from the DOM). */
+		style?: string;
+		/** Unique style scope id in case you are using scoped styles. Will add data-scope="styleScopeId" to the component element. */
+		styleScopeId?: string;
+		/** Object with additional component methods which extend component context. */
+		methods?: string;
+		/** Object with page events handlers. */
+		on?: { [key: string]: Function };
+		/** Called synchronously immediately after the component has been initialized, before data and event/watcher setup. */
+		beforeCreate?: () => void;
+		/** Called synchronously after the component is created, context data and methods are available and component element $el is also created and available. */
+		created?: () => void;
+		/** Called right before component will be added to DOM. */
+		beforeMount?: () => void;
+		/** Called right after component was be added to DOM. */
+		mounted?: () => void;
+		/** Called right before component will be destoyed. */
+		beforeDestroy?: () => void;
+		/** Called when component destroyed. */
+		destroyed?: () => void;
+	}
+
+	interface ComponentContext {
+		/** Dom7 instance with component HTML element */
+		$el: Dom7.Dom7;
+		/** Dom7 library */
+		$: Dom7.Dom7Static;
+		/** Dom7 library */
+		$$: Dom7.Dom7Static;
+		/** Dom7 library */
+		$dom7: Dom7.Dom7Static;
+		/** Framework7 app instance */
+		$app: Framework7;
+		/** Root data and methods you have specified in `data` and `methods` properties on app init */
+		$root: any;
+		/** Current route. Contains object with route. */
+		$route: Route;
+		/** Related router instance. */
+		$router: Router;
+		/** Object with md and ios boolean properties which indicating current theme. */
+		$theme: {
+			/** andriod style is active or not */
+			md: boolean,
+			/** ios style is active or not */
+			ios: boolean
+		};
+	}
+
+	interface Routable {
+		/** Creates dynamic page from specified content string */
+		content?: string;
+		/** Load page content from passed Template7 template string or function */
+		template?: string | Function;
+		/** Load page content from url via Ajax, and compile it using Template7 Also supports dynamic route params from route path using {{paramName}} expression */
+		templateUrl?: string;
+		/** Load page from passed Framework7 Router Component */
+		component?: RouterComponent;
+		/** load pages as a component via Ajax Also supports dynamic route params from route path using {{paramName}} expression */
+		componentUrl?: string;
+	}
+
+	interface RouteOptions {
+		/** Whether the page should be animated or not (overwrites default router settings). */
+		animate?: boolean;
+		/** Whether the page should be saved in router history. */
+		history?: boolean;
+		/** Whether the page should be saved in browser state. In case you are using pushState, then you can pass here false to prevent route getting in browser history. */
+		pushState?: boolean;
+		/** Replace the current page with the new one from route. */
+		reloadCurrent?: boolean;
+		/** Replace the previous page in history with the new one from route. */
+		reloadPrevious?: boolean;
+		/** Load new page and remove all previous pages from history and DOM. */
+		reloadAll?: boolean;
+		/** Custom/extended context for Template7/Component page (when route loaded from `template`, `templateUrl`, `component` or `componentUrl`) */
+		context?: any;
+	}
+
+	interface RoutePath {
+		/** hash for the path. */
+		hash?: string;
+		/** Alais name of the path. */
+		name?: string;
+		/** Parent of this route path. */
+		parentPath?: string;
+		/** route params. If we have matching route with /page/user/:userId/post/:postId/ path and url of the page is /page/user/55/post/12/ then it will be the following object {userId: '55', postId: '12'}. */
+		params: any;
+		/** Route path. */
+		path: string;
+		/** object with route query. If the url is /page/?id=5&foo=bar then it will contain the following object {id: '5', foo: 'bar'}. */
+		query: any;
+		/** Route URL. */
+		url: string;
+		/** object with matching route from available routes. */
+		route: Route;
+	}
+
+	interface Route {
+		/** Route name, e.g. `home`. */
+		name?: string;
+		/** Route path. Means this route will be loaded when we click link that match to this path, or can be loaded by this path using API. */
+		path?: string;
+		/** Object with additional route options (optional). */
+		options?: RouteOptions;
+		/** Array with nested routes. */
+		routes?: Route[];
+		/** Load page from DOM by passed HTMLElement. */
+		el?: HTMLElement;
+		/** Load page from DOM that has same data-name attribute. */
+		pageName?: string;
+		/** Creates dynamic page from specified content string */
+		content?: string;
+		/** Load page content via Ajax.
+		 * Also supports dynamic route params from route path using {{paramName}} expression, 
+		 * 
+		 * e.g. `"/users/:userId/posts/:postId"` or `"http://myapp.com/posts/{{userId}}/{{postId}}'"`
+		 */
+		url?: string;
+		/** Load page content from passed Template7 template string or function. */
+		template?: string | Function;
+		/** Load page content from url via Ajax, and compile it using Template7. */
+		templateUrl?: string;
+		/** Load page from passed Framework7 Router Component. */
+		component?: any;
+		/** load pages as a component via Ajax Also supports dynamic route params from route path using {{paramName}} expression */
+		componentUrl?: string;
+		/** Do required asynchronous manipulation and the return required route content and options. */
+		async?: RouteAsync;
+		/** Array with tab routes */
+		tabs?: Tabs.TabRoute[];
+		/** Action Sheet route */
+		actions?: Routable;
+		/** Popup route */
+		popup?: Routable;
+		/** Login screen route */
+		loginScreen?: Routable;
+		/** Popover route */
+		popover?: Routable;
+		/** Sheet route */
+		sheet?: Routable;
+		/** Object with event handlers */
+		on?: { [key:string]: Function };
+		/** Route alias, or array with route aliases. We need to specify here alias `path` */
+		alias?: string | string[];
+		/** Route redirect. We need to specify here redirect `url` (not path) */
+		redirect?: string | { (route: RoutePath, resolve: (url: string, options?: RouteOptions) => void, reject: () => void) };
+	}
+
+	class Router {
+		/** Link to global app instance. */
+		app: Framework7;
+		/** Link to related View instance. */
+		view: View;
+		/** Object with router initialization parameters. */
+		params: object;
+		/** Router's view HTML element. */
+		el: HTMLElement;
+		/** Dom7 instance with router's view HTML element. */
+		$el: Dom7.Dom7;
+		/** Array with available router's routes. */
+		routes: Route[];
+		/** Array with router's view history. */
+		history: string[];
+		/** Object with router/view cache data. */
+		cache: {
+			components: RouterComponent[],
+			templates: Template7.Template7[],
+			xhr: F7XMLHttpRequest[]
+		};
+		/** Object with current route data. */
+		currentRoute: RoutePath;
+		/** Object with previously active route data. */
+		previousRoute: RoutePath;
+		/** Boolean property indicating is it allowed to change page / navigate or not. */
+		allowPageChange: boolean;
+
+		constructor(app: Framework7, view: View);
+		
+		/**
+		 * Navigate to (load) new page.
+		 * @param url url to navigate to
+		 * @param options with additional navigation properties (optional):
+		 */
+		navigate(url: string, options?: {
+			/** replace the current page with the new one from route. */
+			reloadCurrent?: boolean,
+			/** replace the previous page in history with the new one from route. */
+			reloadPrevious?: boolean,
+			/** load new page and remove all previous pages from history and DOM. */
+			reloadAll?: boolean,
+			/** previous pages history will be cleared after reloading/navigate to the specified route. */
+			clearPreviousHistory?: boolean,
+			/** whether the page should be animated or not (overwrites default router settings). */
+			animate?: boolean,
+			/** whether the page should be saved in router history. */
+			history?: boolean,
+			/** whether the page should be saved in browser state. In case you are using pushState, then you can pass here false to prevent route getting in browser history. */
+			pushState?: boolean,
+			/** If set to true then it will ignore if such URL in cache and reload it using XHR again. */
+			ignoreCache?: boolean,
+			/** Additional Router component or Template7 page context. */
+			context?: object | Template7.Template7
+		});
+		
+		/**
+		 * Go back to previous page, going back in View history.
+		 * @param url url to navigate to (optional). If not specified, then it will go back to the previous page in history.
+		 * @param options with additional navigation properties (optional):
+		 */
+		back(url?: string, options?: {
+			/** whether the page should be animated or not (overwrites default router settings). */
+			animate?: boolean,
+			/** whether the page should be saved in browser state. In case you are using pushState, then you can pass here false to prevent route getting in browser history. */
+			pushState?: boolean,
+			/** If set to true then it will ignore if such URL in cache and reload it using XHR again. */
+			ignoreCache?: boolean,
+			/** if set to true then it will ignore previous page in history and load specified one. */
+			force?: boolean
+		}): void;
+
+		/** Refresh/reload current page. */
+		refreshPage(): void;
+
+		/** Clear router previous pages history and remove all previous pages from DOM. */
+		clearPreviousHistory(): void;
+
+		/**
+		 * Add event handler.
+		 * @param event the name of the event: `init` | `resize` | `orientationchange` | `click` | `touchstart:active` | `touchmove:active` | `touchend:active` | `touchstart:passive` | `touchmove:passive` | `touchend:passive`
+		 * @param handler the handle function that will be added for the event 
+		 */
+		on(event: string, handler: Function): void;
+
+		/** 
+		 * Add event handler that will be removed after it was fired
+		 * @param event the name of the event: `init` | `resize` | `orientationchange` | `click` | `touchstart:active` | `touchmove:active` | `touchend:active` | `touchstart:passive` | `touchmove:passive` | `touchend:passive`
+		 * @param handler the handle function that will be fired once for the event 
+		 */
+		once(event: string, handler: Function): void;
+
+		/** 
+		 * Remove event handler.
+		 * @param event the name of the event: `init` | `resize` | `orientationchange` | `click` | `touchstart:active` | `touchmove:active` | `touchend:active` | `touchstart:passive` | `touchmove:passive` | `touchend:passive`
+		 * @param handler the handle function that will be removed for the event
+		 */
+		off(event: string, handler: Function): void;
+
+		/**
+		 * Remove all handlers for specified event.
+		 * @param event the name of the event: `init` | `resize` | `orientationchange` | `click` | `touchstart:active` | `touchmove:active` | `touchend:active` | `touchstart:passive` | `touchmove:passive` | `touchend:passive`
+		 */
+		off(event: string): void;
+
+		/**
+		 * Fire event on instance.
+		 * @param event event name.
+		 * @param args argument that will be passed into the event handler.
+		 */
+		emit(event: string, ...args: any[]): void
+	}
+
 
 	// reference: <href>https://framework7.io/docs/support.html</href>
 	interface F7Support {
@@ -5774,39 +5775,5 @@ declare namespace Framework7 {
 }
 
 declare module "framework7" {
-	export default Framework7;
-
-	// modules alias
-	export const Accordion: Framework7.Accordion;
-	export const ActionSheet: Framework7.ActionSheet;
-	export const Autocomplete: Framework7.Autocomplete;
-	export const Calendar: Framework7.Calendar;
-	export const DataTable: Framework7.DataTable;
-	export const Dialog: Framework7.Dialog;
-	export const FAB: Framework7.FAB;
-	export const LoginScreen: Framework7.LoginScreen;
-	export const Messagebar: Framework7.Messagebar;
-	export const Messages: Framework7.Messages;
-	export const Notification: Framework7.Notification;
-	export const Panel: Framework7.Panel;
-	export const PhotoBrowser: Framework7.PhotoBrowser;
-	export const Picker: Framework7.Picker;
-	export const Popover: Framework7.Popover;
-	export const Popup: Framework7.Popup;
-	export const PullToRefresh: Framework7.PullToRefresh;
-	export const RangeSlider: Framework7.RangeSlider;
-	export const Searchbar: Framework7.Searchbar;
-	export const SheetModal: Framework7.SheetModal;
-	export const SmartSelect: Framework7.SmartSelect;
-	export const Stepper: Framework7.Stepper;
-	export const Swiper: Framework7.Swiper;
-	export const Swipeout: Framework7.Swipeout;
-	export const Toast: Framework7.Toast;
-	export const Toggle: Framework7.Toggle;
-	export const VirtualList: Framework7.VirtualList;
-	export const View: Framework7.View;
-	export const Router: Framework7.View.Router;
-	export const Route: Framework7.View.Route;
-	export const RoutePath: Framework7.View.RoutePath;
-	export const RouterComponent: Framework7.View.RouterComponent;
+	export = Framework7;
 }
