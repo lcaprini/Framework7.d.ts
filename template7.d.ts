@@ -8,12 +8,10 @@ declare namespace Template7 {
         unregisterHelper? (name: string);
         registerPartial? (name: string, template: string);
         unregisterPartial? (name: string);
-    }
-    
+    }    
 }
 
-declare let Template7: Template7.Template7;
-
-declare module "Template7" {
-    export = Template7;
+declare module "template7" {
+    let Template7: Template7.Template7;
+    export default Template7;
 }

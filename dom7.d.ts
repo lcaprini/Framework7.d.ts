@@ -78,13 +78,13 @@ declare namespace Dom7 {
 		/** Get property value */
 		prop(propName : string) : any;
 		/** Set single property value */
-		prop(propName : string, propValue: any) : Dom7;
+		prop(propName : string, propValue: any) : Dom7;
 		/** Set multiple properties */
 		prop(propertiesObject : any) : Dom7;
 		/** Get attribute value */
 		attr(attrName : string) : string;
 		/** Set single attribute value */
-		attr(attrName : string, attrValue : string) : Dom7;
+		attr(attrName : string, attrValue : string) : Dom7;
 		/** Set multiple attributes */
 		attr(attributesObject : any) : Dom7;
 		/** Remove specified attribute */
@@ -96,7 +96,7 @@ declare namespace Dom7 {
 		
 		// DATA
 		/** Store arbitrary data associated with the matched elements */
-		data(key : string, value : any) : Dom7;
+		data(key : string, value : any) : Dom7;
 		/** Return the value at the named data store for the first element in the collection, as set by data(key, value) or by an HTML5 data-* attribute */
 		data(key : string) : any;
 		/** Remove specified data */
@@ -112,19 +112,19 @@ declare namespace Dom7 {
 		
 		// EVENTS
 		/** Add event handler function to one or more events to the selected elements */
-		on(eventName : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
+		on(eventName : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
 		/** Live/delegated event handler */
-		on(eventName : string, delegatedTarget : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
+		on(eventName : string, delegatedTarget : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
 		/** Add event handler function to one or more events to the selected elements that will be executed only once */
-		once(eventName : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
+		once(eventName : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
 		/** Live/delegated event handler that will be executed only once */
-		once(eventName : string, delegatedTarget : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
+		once(eventName : string, delegatedTarget : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
 		/** Remove event handler */
-		off(eventName : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
+		off(eventName : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
 		/** Remove live/delegated event handler */
-		off(eventName : string, delegatedTarget : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
+		off(eventName : string, delegatedTarget : string, handler : (event : Event) => void, useCapture? : boolean) : Dom7;
 		/** Execute all handlers added to the matched elements for the specified event */
-		trigger(eventName : string, eventData : any) : Dom7;
+		trigger(eventName : string, eventData : any) : Dom7;
 		/** Adds prefixed transitionEnd event handler to collection */
 		transitionEnd(callback : () => void, permanent : boolean) : Dom7;
 		/** Adds prefixed animationEnd event handler to collection */
@@ -158,7 +158,7 @@ declare namespace Dom7 {
 		/** Get value of specified CSS property for the first element */
 		css(property : string) : string | number;
 		/** Set specified CSS property to the matched elements */
-		css(property : string, value: string | number) : Dom7;
+		css(property : string, value: string | number) : Dom7;
 		/** Set multiple CSS properties to the matched elements */
 		css(propertiesObject : any) : Dom7;
 		
@@ -379,10 +379,8 @@ declare namespace Dom7 {
 	}
 }
 
-/** Export DOM7 to local variable to make it easy accessable */
-declare let Dom7 : Dom7.Dom7Static;
-
-declare module "Dom7" {
-	export = Dom7;
+declare module "dom7" {
+	/** Export DOM7 to local variable to make it easy accessable */
+	let Dom7 : Dom7.Dom7Static;
+	export default Dom7;
 }
-
