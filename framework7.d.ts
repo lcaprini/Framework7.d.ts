@@ -882,7 +882,7 @@ declare class Framework7 {
 		 * Create Searchbar instance.
 		 * @param params Object with Searchbar parameters.
 		 */
-		create(params: Framework7.Searchbar.Parameter): Framework7.SearchBar;
+		create(params: Framework7.Searchbar.Parameter): Framework7.Searchbar;
 	
 		/**
 		 * Destroy Searchbar instance.
@@ -894,37 +894,37 @@ declare class Framework7 {
 		 * Get Searchbar instance by HTML element.
 		 * @param el HTMLElement or string (with CSS Selector). Searchbar element.
 		 */
-		get(el: HTMLElement | string): Framework7.SearchBar;
+		get(el: HTMLElement | string): Framework7.Searchbar;
 	
 		/**
 		 * Clear Searchbar text input.
 		 * @param el HTMLElement or string (with CSS Selector). Searchbar element.
 		 */
-		clear(el: HTMLElement | string): Framework7.SearchBar;
+		clear(el: HTMLElement | string): Framework7.Searchbar;
 	
 		/**
 		 * Enable Searchbar.
 		 * @param el HTMLElement or string (with CSS Selector). Searchbar element.
 		 */
-		enable(el: HTMLElement | string): Framework7.SearchBar;
+		enable(el: HTMLElement | string): Framework7.Searchbar;
 	
 		/**
 		 * Disable Searchbar.
 		 * @param el HTMLElement or string (with CSS Selector). Searchbar element.
 		 */
-		disable(el: HTMLElement | string): Framework7.SearchBar;
+		disable(el: HTMLElement | string): Framework7.Searchbar;
 	
 		/**
 		 * Toggle Searchbar: enable if it was disabled, or disable if it was enabled.
 		 * @param el HTMLElement or string (with CSS Selector). Searchbar element.
 		 */
-		toggle(el: HTMLElement | string): Framework7.SearchBar;
+		toggle(el: HTMLElement | string): Framework7.Searchbar;
 	
 		/**
 		 * Search with query.
 		 * @param el HTMLElement or string (with CSS Selector). Searchbar element.
 		 */
-		search(el: HTMLElement | string, query: string): Framework7.SearchBar;
+		search(el: HTMLElement | string, query: string): Framework7.Searchbar;
 	};
 	/** Sheet Modal module. */
 	sheet: {
@@ -3493,7 +3493,7 @@ declare namespace Framework7 {
 	// ─── SEARCHBAR MODULE ───────────────────────────────────────────────────────────
 	//
 
-	class SearchBar {
+	class Searchbar {
 		/** Link to global app instance. */
 		app: Framework7;
 		/**  */
@@ -5775,6 +5775,38 @@ declare namespace Framework7 {
 
 declare module "framework7" {
 	export default Framework7;
-	export type Router = Framework7.View.Router;
-	export type Route = Framework7.View.Route;
+
+	// modules alias
+	export const Accordion: Framework7.Accordion;
+	export const ActionSheet: Framework7.ActionSheet;
+	export const Autocomplete: Framework7.Autocomplete;
+	export const Calendar: Framework7.Calendar;
+	export const DataTable: Framework7.DataTable;
+	export const Dialog: Framework7.Dialog;
+	export const FAB: Framework7.FAB;
+	export const LoginScreen: Framework7.LoginScreen;
+	export const Messagebar: Framework7.Messagebar;
+	export const Messages: Framework7.Messages;
+	export const Notification: Framework7.Notification;
+	export const Panel: Framework7.Panel;
+	export const PhotoBrowser: Framework7.PhotoBrowser;
+	export const Picker: Framework7.Picker;
+	export const Popover: Framework7.Popover;
+	export const Popup: Framework7.Popup;
+	export const PullToRefresh: Framework7.PullToRefresh;
+	export const RangeSlider: Framework7.RangeSlider;
+	export const Searchbar: Framework7.Searchbar;
+	export const SheetModal: Framework7.SheetModal;
+	export const SmartSelect: Framework7.SmartSelect;
+	export const Stepper: Framework7.Stepper;
+	export const Swiper: Framework7.Swiper;
+	export const Swipeout: Framework7.Swipeout;
+	export const Toast: Framework7.Toast;
+	export const Toggle: Framework7.Toggle;
+	export const VirtualList: Framework7.VirtualList;
+	export const View: Framework7.View;
+	export const Router: Framework7.View.Router;
+	export const Route: Framework7.View.Route;
+	export const RoutePath: Framework7.View.RoutePath;
+	export const RouterComponent: Framework7.View.RouterComponent;
 }
