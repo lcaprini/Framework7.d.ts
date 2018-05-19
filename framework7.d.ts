@@ -5774,6 +5774,6 @@ declare namespace Framework7 {
     }
 }
 
-declare module "framework7" {
+declare module "framework7" { 
     export default Framework7;
 }

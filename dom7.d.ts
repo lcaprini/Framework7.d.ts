@@ -1,4 +1,4 @@
-declare namespace Dom7 {
+declare namespace Dom7 { 
     interface Dom7AjaxSettings {
         /** Request url */
         url?: string;

@@ -8,7 +8,7 @@ declare namespace Template7 {
         unregisterHelper? (name: string):any;
         registerPartial? (name: string, template: string):any;
         unregisterPartial? (name: string):any;
-    }
+    } 
 }
 
 declare module "template7" {
