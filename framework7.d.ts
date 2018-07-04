@@ -1330,7 +1330,7 @@ declare namespace Framework7 {
         /** Array with default routes to all views. `Default: []` */
         routes?: Route[];
         /** App root element. `Default: body`*/
-        root: string;
+        root?: string;
         /** App root data. Must be a function that returns an object with root data. */
         data?: () => object;
         /** App root methods. Object with methods. `Default: {}`*/
@@ -1365,7 +1365,7 @@ declare namespace Framework7 {
             /** Minimal allowed delay (in ms) between multiple clicks. `Default: 50` */
             fastClicksDelayBetweenClicks?: number,
             /** This parameter allows to specify elements not handled by fast clicks by passing CSS selector of such elements. */
-            fastClicksExclude: string,
+            fastClicksExclude?: string,
             /** A boolean flat that disables the context menu. `Default: true` */
             disableContextMenu?: boolean,
             /** Enables tap hold. `Default: false`*/
@@ -5794,4 +5794,3 @@ declare namespace Framework7 {
 declare module "framework7" {
     export default Framework7;
 }
-
