@@ -1403,10 +1403,12 @@ declare namespace Framework7 {
         popup?: Popup.Parameter;
         sheet?: SheetModal.Parameter;
         smartSelect?: SmartSelect.Parameter;
+        sortable?: SortableList.Parameter;
         stepper?: Stepper.Parameter;
         statusbar?: Statusbar.Parameter;
         swipeout?: Swipeout.Parameter;
         toast?: Toast.Parameter;
+        navbar?: Navbar.AppParameter;
         toolbar?: Toolbar.Parameter;
     }
 
@@ -3839,6 +3841,21 @@ declare namespace Framework7 {
     }
 
     //
+    // ─── SORTABLE LIST MODULE ────────────────────────────────────────────────────────
+    //
+
+    class SortableList {
+
+    }
+    namespace SortableList {
+
+        interface Parameter {
+            /** When enabled then it will move (reorder) HTML elements according to new sortable order. It is useful to disable it if you use other library for DOM manipulation, like React or Vue. */
+            moveElements?: boolean;
+        }
+    }
+
+    //
     // ─── STATUSBAR MODULE ───────────────────────────────────────────────────────────
     //
 
@@ -5774,6 +5791,7 @@ declare namespace Framework7 {
     }
 }
 
-declare module "framework7" { 
+declare module "framework7" {
     export default Framework7;
 }
+
