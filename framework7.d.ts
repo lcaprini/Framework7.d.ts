@@ -1410,6 +1410,7 @@ declare namespace Framework7 {
         toast?: Toast.Parameter;
         navbar?: Navbar.AppParameter;
         toolbar?: Toolbar.Parameter;
+        notification?: Notification.Parameter;
     }
 
     //
