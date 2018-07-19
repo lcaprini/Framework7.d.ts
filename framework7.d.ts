@@ -761,7 +761,7 @@ declare class Framework7 {
     /** Preloader module. */
     preloader: {
         /** Show Preloader overlay */
-        show(color: string): void;
+        show(color?: string): void;
 
         /** Hide Preloader overlay */
         hide(): void;
