@@ -3867,9 +3867,9 @@ declare namespace Framework7 {
             /** Can be t`rue, `false`, `auto`. Defines whether the statusbar overlay should be visible or not. In case of `auto` Framework7 will detect it automatically depending whether the app is in fullscreen mode or not. */
             overlay?: boolean | string;
             /** Hex string (`#RRGGBB`) with background color when iOS theme is active. If passed then it will override CSS value. */
-            iosBackgroundColor?: boolean;
+            iosBackgroundColor?: string;
             /** Hex string (`#RRGGBB`) with background color when MD theme is active. If passed then it will override CSS value */
-            materialBackgroundColor?: boolean;
+            materialBackgroundColor?: string;
             /** If enabled, then click on statusbar overlay will scroll top page content to the top. `This functionality is only available when app is running under cordova/phonegap environment with installed cordova-plugin-statusbar` */
             scrollTopOnClick?: boolean;
             /** `iOS-only feature`  Makes the statusbar overlay or not overlay the WebView. `This functionality is only available when app is running under cordova/phonegap environment with installed cordova-plugin-statusbar`. */
